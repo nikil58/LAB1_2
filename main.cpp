@@ -42,12 +42,12 @@ int main()
         return -1;
     }
     size_t cluster;
-    cout << "Enter a size of the cluster" << endl;
+    cout << "Enter a size of the cluster: ";
     cin >> cluster;
     cluster *= 4096;
 
     size_t operationCounter;
-    cout << "Enter count of operations" << endl;
+    cout << "\nEnter count of operations: ";
     cin >> operationCounter;
 
     int l_source_size = 0;
@@ -69,7 +69,7 @@ int main()
         LARGE_INTEGER start_time, end_time, frequency;
         QueryPerformanceFrequency(&frequency);
         QueryPerformanceCounter(&start_time);
-        size_t current_size = 0;
+        int current_size = 0;
         int count = 0;
         do {
             size_t opCount = 0;
@@ -97,14 +97,13 @@ int main()
                 over_write[i].Offset += cluster * operationCounter;
             callback_count = 0;
             count++;
-            current_size += cluster * count;
-        } while (current_size < l_source_size);
+            current_size += cluster * opCount;
+        } while (current_size <= l_source_size);
         //copy_file(opener_s, opener_f, cluster, operationCounter, l_source_size, buffer, over_read, over_write);
 
         QueryPerformanceCounter(&end_time);
 
-        std::cout << "Time: " << time_calculation(start_time, end_time, frequency) << " microseconds\n";
-    system("pause");
+        std::cout << "\nTime: " << time_calculation(start_time, end_time, frequency) << " microseconds\n";
 
         SetFilePointer(opener_f, l_source_size, nullptr, FILE_BEGIN);
         SetEndOfFile(opener_f);
@@ -116,5 +115,6 @@ int main()
         delete[] buffer;
         delete[] over_read;
         delete[] over_write;
+        system("pause");
         return 0;
     }
